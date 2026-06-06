@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Score Control</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: transparent;
+  font-family: 'Orbitron', sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 16px;
+}
+.card {
+  background: rgba(0,10,10,0.95);
+  border: 1px solid rgba(0,255,255,0.15);
+  border-left: 4px solid #0ff;
+  clip-path: polygon(0 0, 100% 0, 100% 92%, 96% 100%, 0 100%);
+  box-shadow: 0 0 20px rgba(0,255,255,0.08);
+  padding: 20px 20px 28px;
+  width: 100%;
+  max-width: 300px;
+}
+.title {
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: #444;
+  margin-bottom: 16px;
+  text-align: center;
+}
+.score-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+.score-block { text-align: center; }
+.score-num { font-size: 48px; font-weight: 900; line-height: 1; }
+.score-num.w { color: #0ff; text-shadow: 0 0 12px rgba(0,255,255,0.4); }
+.score-num.l { color: #f0f; text-shadow: 0 0 12px rgba(255,0,255,0.4); }
+.score-lbl { font-size: 9px; letter-spacing: 2px; color: #444; margin-top: 3px; }
+.divider { font-size: 32px; color: #222; padding-bottom: 12px; }
+.btn-group { display: flex; flex-direction: column; gap: 10px; }
+.btn-row { display: flex; gap: 8px; }
+.btn {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  padding: 14px 0;
+  border-radius: 3px;
+  cursor: pointer;
+  background: transparent;
+  flex: 1;
+  transition: all 0.15s;
+}
+.btn:active { transform: scale(0.95); opacity: 0.6; }
+.win-add { color: #0ff; border: 1px solid rgba(0,255,255,0.4); }
+.win-add:hover { background: rgba(0,255,255,0.08); }
+.win-sub { color: #0aa; border: 1px solid rgba(0,180,180,0.25); font-size: 10px; }
+.loss-add { color: #f0f; border: 1px solid rgba(255,0,255,0.4); }
+.loss-add:hover { background: rgba(255,0,255,0.08); }
+.loss-sub { color: #a0a; border: 1px solid rgba(180,0,180,0.25); font-size: 10px; }
+.reset-btn {
+  color: #444;
+  border: 1px solid rgba(255,255,255,0.1);
+  font-size: 9px;
+  padding: 10px 0;
+  width: 100%;
+  letter-spacing: 2px;
+}
+.reset-btn:hover { color: #888; }
+.status {
+  font-size: 8px;
+  letter-spacing: 2px;
+  color: #333;
+  text-align: center;
+  margin-top: 14px;
+}
+.status.ok { color: #0ff; }
+.status.err { color: #f00; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="title">SCORE CONTROL // PVZ</div>
+  <div class="score-display">
+    <div class="score-block">
+      <div class="score-num w" id="wins">00</div>
+      <div class="score-lbl">WINS</div>
+    </div>
+    <div class="divider">:</div>
+    <div class="score-block">
+      <div class="score-num l" id="losses">00</div>
+      <div class="score-lbl">LOSSES</div>
+    </div>
+  </div>
+  <div class="btn-group">
+    <div class="btn-row">
+      <button class="btn win-add" onclick="change('wins', 1)">+WIN</button>
+      <button class="btn win-sub" onclick="change('wins', -1)">-WIN</button>
+    </div>
+    <div class="btn-row">
+      <button class="btn loss-add" onclick="change('losses', 1)">+LOSS</button>
+      <button class="btn loss-sub" onclick="change('losses', -1)">-LOSS</button>
+    </div>
+    <button class="btn reset-btn" onclick="resetScore()">RESET SCORE</button>
+  </div>
+</div>
+<div class="status" id="status">CONNECTING...</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+const app = initializeApp({ databaseURL: "https://tallycounter-43685-default-rtdb.firebaseio.com" });
+const db = getDatabase(app);
+const scoreRef = ref(db, 'score');
+
+function fmt(n) { return n < 10 ? '0' + n : '' + n; }
+var wins = 0, losses = 0;
+
+onValue(scoreRef, (snap) => {
+  var data = snap.val() || { wins: 0, losses: 0 };
+  wins = data.wins || 0;
+  losses = data.losses || 0;
+  document.getElementById('wins').innerText = fmt(wins);
+  document.getElementById('losses').innerText = fmt(losses);
+  document.getElementById('status').innerText = 'CONNECTED';
+  document.getElementById('status').className = 'status ok';
+}, () => {
+  document.getElementById('status').innerText = 'CONNECTION ERROR';
+  document.getElementById('status').className = 'status err';
+});
+
+window.change = function(type, delta) {
+  var val = type === 'wins' ? wins : losses;
+  val = Math.max(0, val + delta);
+  var update = { wins, losses };
+  update[type] = val;
+  set(scoreRef, update);
+};
+
+window.resetScore = function() {
+  set(scoreRef, { wins: 0, losses: 0 });
+};
+</script>
+</body>
+</html>
