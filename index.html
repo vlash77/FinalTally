@@ -15,7 +15,7 @@ body {
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  padding: 16px;
+  padding: 12px;
 }
 .card {
   background: rgba(0,10,10,0.95);
@@ -23,38 +23,31 @@ body {
   border-left: 4px solid #0ff;
   clip-path: polygon(0 0, 100% 0, 100% 92%, 96% 100%, 0 100%);
   box-shadow: 0 0 20px rgba(0,255,255,0.08);
-  padding: 20px 20px 28px;
+  padding: 14px 16px 20px;
   width: 100%;
-  max-width: 300px;
-}
-.title {
-  font-size: 9px;
-  letter-spacing: 3px;
-  color: #444;
-  margin-bottom: 16px;
-  text-align: center;
+  max-width: 260px;
 }
 .score-display {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 14px;
-  margin-bottom: 20px;
+  gap: 10px;
+  margin-bottom: 14px;
 }
 .score-block { text-align: center; }
-.score-num { font-size: 48px; font-weight: 900; line-height: 1; }
+.score-num { font-size: 44px; font-weight: 900; line-height: 1; }
 .score-num.w { color: #0ff; text-shadow: 0 0 12px rgba(0,255,255,0.4); }
 .score-num.l { color: #f0f; text-shadow: 0 0 12px rgba(255,0,255,0.4); }
-.score-lbl { font-size: 9px; letter-spacing: 2px; color: #444; margin-top: 3px; }
-.divider { font-size: 32px; color: #222; padding-bottom: 12px; }
-.btn-group { display: flex; flex-direction: column; gap: 10px; }
-.btn-row { display: flex; gap: 8px; }
+.score-lbl { font-size: 8px; letter-spacing: 2px; color: #444; margin-top: 3px; }
+.divider { font-size: 28px; color: #222; padding-bottom: 10px; }
+.btn-group { display: flex; flex-direction: column; gap: 7px; }
+.btn-row { display: flex; gap: 6px; }
 .btn {
   font-family: 'Orbitron', sans-serif;
-  font-size: 12px;
+  font-size: 10px;
   font-weight: 900;
   letter-spacing: 1px;
-  padding: 14px 0;
+  padding: 9px 0;
   border-radius: 3px;
   cursor: pointer;
   background: transparent;
@@ -64,25 +57,25 @@ body {
 .btn:active { transform: scale(0.95); opacity: 0.6; }
 .win-add { color: #0ff; border: 1px solid rgba(0,255,255,0.4); }
 .win-add:hover { background: rgba(0,255,255,0.08); }
-.win-sub { color: #0aa; border: 1px solid rgba(0,180,180,0.25); font-size: 10px; }
+.win-sub { color: #0aa; border: 1px solid rgba(0,180,180,0.25); font-size: 9px; }
 .loss-add { color: #f0f; border: 1px solid rgba(255,0,255,0.4); }
 .loss-add:hover { background: rgba(255,0,255,0.08); }
-.loss-sub { color: #a0a; border: 1px solid rgba(180,0,180,0.25); font-size: 10px; }
+.loss-sub { color: #a0a; border: 1px solid rgba(180,0,180,0.25); font-size: 9px; }
 .reset-btn {
   color: #444;
   border: 1px solid rgba(255,255,255,0.1);
-  font-size: 9px;
-  padding: 10px 0;
+  font-size: 8px;
+  padding: 8px 0;
   width: 100%;
   letter-spacing: 2px;
 }
 .reset-btn:hover { color: #888; }
 .status {
-  font-size: 8px;
+  font-size: 7px;
   letter-spacing: 2px;
   color: #333;
   text-align: center;
-  margin-top: 14px;
+  margin-top: 10px;
 }
 .status.ok { color: #0ff; }
 .status.err { color: #f00; }
@@ -90,7 +83,6 @@ body {
 </head>
 <body>
 <div class="card">
-  <div class="title">SCORE CONTROL // PVZ</div>
   <div class="score-display">
     <div class="score-block">
       <div class="score-num w" id="wins">00</div>
