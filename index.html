@@ -70,15 +70,6 @@ body {
   letter-spacing: 2px;
 }
 .reset-btn:hover { color: #888; }
-.status {
-  font-size: 7px;
-  letter-spacing: 2px;
-  color: #333;
-  text-align: center;
-  margin-top: 10px;
-}
-.status.ok { color: #0ff; }
-.status.err { color: #f00; }
 </style>
 </head>
 <body>
@@ -106,7 +97,6 @@ body {
     <button class="btn reset-btn" onclick="resetScore()">RESET SCORE</button>
   </div>
 </div>
-<div class="status" id="status">CONNECTING...</div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
@@ -125,11 +115,6 @@ onValue(scoreRef, (snap) => {
   losses = data.losses || 0;
   document.getElementById('wins').innerText = fmt(wins);
   document.getElementById('losses').innerText = fmt(losses);
-  document.getElementById('status').innerText = 'CONNECTED';
-  document.getElementById('status').className = 'status ok';
-}, () => {
-  document.getElementById('status').innerText = 'CONNECTION ERROR';
-  document.getElementById('status').className = 'status err';
 });
 
 window.change = function(type, delta) {
